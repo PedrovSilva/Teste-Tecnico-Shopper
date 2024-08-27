@@ -1,6 +1,17 @@
 {
+  "name": "api-leitura",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts":{
+    "build": "tsc",
+    "start": "yarn build && node dist/src/index.js"
+  },
   "devDependencies": {
+    "@types/module-alias": "^2.0.4",
     "@types/node": "^22.5.0",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "module-alias": "^2.2.3"
   }
 }
