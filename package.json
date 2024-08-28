@@ -2,13 +2,18 @@
   "name": "api-leitura",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts":{
+  "scripts": {
     "build": "tsc",
-    "start": "yarn build && node dist/src/index.js"
+    "start": "yarn build && node dist/src/index.js",
+    "lint": "eslint src/**/*.ts test/**/*.ts ",
+    "lint:fix": "eslint src/**/*.ts test/**/*.ts --fix"
   },
   "devDependencies": {
     "@types/module-alias": "^2.0.4",
     "@types/node": "^22.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "eslint": "^9.9.1",
     "typescript": "^5.5.4"
   },
   "dependencies": {
