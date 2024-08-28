@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import app from "../path/to/your/app"; // Certifique-se de importar o app corretamente
+import{ app} from "@test/jest-setup"; 
 import { DatabaseService } from "../path/to/databaseService"; // Importar o serviço de banco de dados
 import { LLMService } from "../path/to/llmService"; // Importar o serviço LLM
 

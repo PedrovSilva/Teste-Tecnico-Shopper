@@ -1,5 +1,5 @@
 import supertest from "supertest";
-import app from "../path/to/your/app"; // Certifique-se de importar o app corretamente
+import{ app} from "@test/jest-setup"; // Certifique-se de importar o app corretamente
 import { DatabaseService } from "../path/to/databaseService"; // Importar o serviço de banco de dados
 
 jest.mock("../path/to/databaseService"); // Mockar o serviço de banco de dados
