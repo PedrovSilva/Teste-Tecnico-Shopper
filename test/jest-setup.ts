@@ -1,16 +1,14 @@
+import express from 'express';
 import { SetupServer } from '@src/server';
 import supertest, { SuperTest, Test } from 'supertest';
 
-// Declare the app variable at the module level
-let app: SuperTest<Test>;
+let app: any;
 
-// Set up the server and initialize `app` before all tests
 beforeAll(async () => {
   const server = new SetupServer();
-  await server.init();  // Assuming `init` returns a promise or is async
-  app = supertest(server.getApp());
+  await server.init();
+  const expressApp: express.Application = server.getApp(); // Ensure this is correct
+  app = supertest(expressApp);
 });
 
-// Export the `app` variable for use in your tests
 export { app };
-
