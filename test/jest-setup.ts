@@ -1,6 +1,6 @@
-import express from 'express';
-import { SetupServer } from '@src/server';
-import supertest, { SuperTest, Test } from 'supertest';
+import express from "express";
+import { SetupServer } from "@src/server";
+import supertest, { SuperTest, Test } from "supertest";
 
 let app: any;
 
