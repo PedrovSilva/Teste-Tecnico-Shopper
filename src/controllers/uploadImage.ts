@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'; // Para gerar GUIDs
 import { someExternalService } from "./someExternalService"; // Suponha que você tenha um serviço para processar a imagem
 
 @Controller("upload")
-export class UploadController {
+export class UploadImageController {
     
     @Post("")
     public async postUploadImage(req: Request, res: Response): Promise<void> {

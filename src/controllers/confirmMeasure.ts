@@ -4,7 +4,8 @@ import { v4 as uuidv4 } from 'uuid'; // Para gerar GUIDs (se necessário)
 import { DatabaseService } from "./databaseService"; // Suponha que você tenha um serviço de banco de dados
 
 @Controller("confirm")
-export class ConfirmController {
+export class ConfirmMeasure
+Controller {
     private dbService: DatabaseService;
 
     constructor() {
