@@ -33,7 +33,7 @@ export class LLMService {
             fileUri: uploadResponse.file.uri
           }
         },
-        { text: "Describe how this product might be manufactured." },
+        { text: "Return only the measure value on the bill" },
       ]);
 
       // Assuming the result contains the value in some format
