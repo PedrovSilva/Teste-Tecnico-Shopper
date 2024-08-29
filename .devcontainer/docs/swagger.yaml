@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  title: Upload Image API
+  version: 1.0.0
+  description: API para fazer upload de imagens e processar leituras.
+paths:
+  /upload:
+    post:
+      summary: Upload uma imagem para processamento
+      description: Recebe uma imagem em base64, processa e armazena as leituras associadas.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
+                  description: A imagem em formato base64 que será processada.
+                customer_code:
+                  type: string
+                  description: Código do cliente associado à leitura.
+                measure_datetime:
+                  type: string
+                  format: date-time
+                  description: Data e hora da medição no formato ISO 8601.
+                measure_type:
+                  type: string
+                  enum:
+                    - WATER
+                    - GAS
+                  description: Tipo de medição, pode ser "WATER" ou "GAS".
+              required:
+                - image
+                - customer_code
+                - measure_datetime
+                - measure_type
+      responses:
+        '200':
+          description: Sucesso no upload e processamento da imagem
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image_url:
+                    type: string
+                    description: URL temporária onde a imagem foi salva.
+                  measure_value:
+                    type: number
+                    format: float
+                    description: Valor da medição extraído da imagem.
+                  measure_uuid:
+                    type: string
+                    description: UUID gerado para a medição.
+        '400':
+          description: Dados fornecidos são inválidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_description:
+                    type: string
+        '409':
+          description: Leitura do mês já foi realizada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_description:
+                    type: string
+        '500':
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_description:
+                    type: string
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error_code:
+          type: string
+        error_description:
+          type: string
