@@ -1,7 +1,7 @@
 // llmService.ts
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { API_KEY } from './config'; // Ensure you have your API key in a config file or environment variable
+const { API_KEY } = require('./config');
 
 export class LLMService {
   private fileManager: GoogleAIFileManager;

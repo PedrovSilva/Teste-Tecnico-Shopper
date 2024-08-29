@@ -2,7 +2,7 @@ import { Controller, Post } from "@overnightjs/core";
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { DatabaseService } from "./databaseService"; // Serviço de banco de dados
-import { LLMService } from "./llmService"; // Serviço para interagir com a API LLM
+import { LLMService } from "@src/services/llmService"; // Serviço para interagir com a API LLM
 import { format } from "date-fns"; // Para formatação de datas
 
 @Controller("upload")
