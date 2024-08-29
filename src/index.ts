@@ -1,3 +1,4 @@
+import './util/module-alias';
 import { SetupServer } from "@src/server"; // Ajuste o caminho conforme necessário
 
 async function startServer() {
