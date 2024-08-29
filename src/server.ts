@@ -5,15 +5,17 @@ import { UploadImageController } from "./controllers/uploadImage";
 import { ListMeasuresController } from "./controllers/listMeasures";
 import { ConfirmMeasureController } from "./controllers/confirmMeasure";
 import { Application } from "express";
+import * as database from '@src/database';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
     super();
   }
 
-  public init(): void {
+  public async init(): Promise<void> {
     this.setupExpress();
     this.setupController();
+    await this.setupDatabase();
   }
 
   public getApp(): Application {
@@ -33,5 +35,12 @@ export class SetupServer extends Server {
       uploadImageController,
       confirmMeasuresController,
     ]);
+  }
+
+  private async setupDatabase():Promise <void> {
+    await database.connect();
+  }
+  public async close(): Promise<void> {
+    await database.close();
   }
 }

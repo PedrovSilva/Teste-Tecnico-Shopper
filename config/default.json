@@ -1,0 +1,7 @@
+{
+    "App": {
+      "database": {
+        "mongoUrl": "mongodb://localhost:27017/surf-forecast"
+      }
+    }
+  }
