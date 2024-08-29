@@ -1,13 +1,18 @@
 // llmService.ts
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const { API_KEY } = require('./config');
+require('dotenv').config();
+
+const API_KEY = process.env.GEMINI_API_KEY;
 
 export class LLMService {
   private fileManager: GoogleAIFileManager;
   private genAI: GoogleGenerativeAI;
 
   constructor() {
+    if (!API_KEY) {
+      throw new Error('API_KEY is not defined in the environment variables.');
+    }
     this.fileManager = new GoogleAIFileManager(API_KEY);
     this.genAI = new GoogleGenerativeAI(API_KEY);
   }

@@ -1,11 +1,24 @@
 // llmService.test.ts
-import { LLMService } from './llmService';
-import { GoogleAIFileManager } from '@google/generative-ai/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { LLMService } from '@src/services/llmService';
+import { FileState, GoogleAIFileManager } from '@google/generative-ai/server';
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 
 // Mocks
-jest.mock('@google/generative-ai/server');
-jest.mock('@google/generative-ai');
+jest.mock('@google/generative-ai/server', () => {
+  return {
+    GoogleAIFileManager: jest.fn().mockImplementation(() => ({
+      uploadFile: jest.fn(),
+    })),
+  };
+});
+
+jest.mock('@google/generative-ai', () => {
+  return {
+    GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
+      getGenerativeModel: jest.fn(),
+    })),
+  };
+});
 
 describe('LLMService', () => {
   let llmService: LLMService;
@@ -13,18 +26,27 @@ describe('LLMService', () => {
   let mockGenerativeAI: jest.Mocked<GoogleGenerativeAI>;
 
   beforeEach(() => {
-    mockFileManager = new GoogleAIFileManager() as jest.Mocked<GoogleAIFileManager>;
-    mockGenerativeAI = new GoogleGenerativeAI() as jest.Mocked<GoogleGenerativeAI>;
+    mockFileManager = new GoogleAIFileManager('dummyApiKey') as jest.Mocked<GoogleAIFileManager>;
+    mockGenerativeAI = new GoogleGenerativeAI('dummyApiKey') as jest.Mocked<GoogleGenerativeAI>;
+    
     llmService = new LLMService();
     (llmService as any).fileManager = mockFileManager;
     (llmService as any).genAI = mockGenerativeAI;
   });
 
   it('should extract value from image correctly', async () => {
+    // Ajustado para corresponder à interface esperada
     const mockUploadResponse = {
       file: {
         mimeType: 'image/jpeg',
         uri: 'http://example.com/image.jpg',
+        name: 'image.jpg',
+        sizeBytes: '12345', // Ajuste para string
+        createTime: new Date().toISOString(),
+        updateTime: new Date().toISOString(),
+        expirationTime: new Date().toISOString(),
+        sha256Hash: 'fakehash',
+        state: 'active' as FileState // Ajuste para valor válido de FileState
       },
     };
 
@@ -34,10 +56,13 @@ describe('LLMService', () => {
       },
     };
 
-    mockFileManager.uploadFile = jest.fn().mockResolvedValue(mockUploadResponse);
-    mockGenerativeAI.getGenerativeModel = jest.fn().mockReturnValue({
+    // Ajuste para corresponder à interface esperada
+    const mockGenerativeModel: Partial<GenerativeModel> = {
       generateContent: jest.fn().mockResolvedValue(mockGenerateContentResponse),
-    });
+    };
+
+    mockFileManager.uploadFile.mockResolvedValue(mockUploadResponse);
+    mockGenerativeAI.getGenerativeModel.mockReturnValue(mockGenerativeModel as GenerativeModel);
 
     const imageBuffer = Buffer.from('fake-image-data');
     const result = await llmService.extractValueFromImage(imageBuffer);
@@ -46,7 +71,7 @@ describe('LLMService', () => {
   });
 
   it('should handle errors gracefully', async () => {
-    mockFileManager.uploadFile = jest.fn().mockRejectedValue(new Error('Upload failed'));
+    mockFileManager.uploadFile.mockRejectedValue(new Error('Upload failed'));
 
     const imageBuffer = Buffer.from('fake-image-data');
     

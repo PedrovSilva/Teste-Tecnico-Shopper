@@ -5,6 +5,7 @@ module.exports = {
   displayName: 'root-tests',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
   testEnvironment: 'node',
+  setupFiles: ['dotenv/config'],
   clearMocks: true,
   preset: 'ts-jest',
   moduleNameMapper: {
