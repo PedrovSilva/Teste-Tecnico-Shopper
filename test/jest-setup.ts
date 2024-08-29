@@ -1,5 +1,5 @@
-import express from 'express';
-import { SetupServer } from '@src/server';
+import express from "express";
+import { SetupServer } from "@src/server";
 
 let expressApp: express.Application;
 

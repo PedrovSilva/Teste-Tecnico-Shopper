@@ -1,6 +1,6 @@
-import { Reading, gfs } from '@src/models/reading'; // Ajuste o caminho conforme a estrutura do projeto
-import mongoose from 'mongoose';
-import { ObjectId } from 'mongodb';
+import { Reading, gfs } from "@src/models/reading"; // Ajuste o caminho conforme a estrutura do projeto
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 export class DatabaseService {
   // Método para obter medidas por código do cliente e tipo de medição
@@ -16,8 +16,8 @@ export class DatabaseService {
 
       return await Reading.find(query).then();
     } catch (error) {
-      console.error('Error fetching measures:', error);
-      throw new Error('Error fetching measures');
+      console.error("Error fetching measures:", error);
+      throw new Error("Error fetching measures");
     }
   }
 
@@ -33,16 +33,18 @@ export class DatabaseService {
         measure_type,
         measure_datetime: {
           $gte: new Date(`${month}-01`),
-          $lt: new Date(`${month}-01`).setMonth(new Date(`${month}-01`).getMonth() + 1),
+          $lt: new Date(`${month}-01`).setMonth(
+            new Date(`${month}-01`).getMonth() + 1
+          ),
         },
       }).then();
     } catch (error) {
-      console.error('Error fetching reading:', error);
-      throw new Error('Error fetching reading');
+      console.error("Error fetching reading:", error);
+      throw new Error("Error fetching reading");
     }
   }
-   // Método para salvar uma nova leitura
-   public async saveReading(readingData: {
+  // Método para salvar uma nova leitura
+  public async saveReading(readingData: {
     measure_uuid: string;
     customer_code: string;
     measure_datetime: string;
@@ -54,36 +56,42 @@ export class DatabaseService {
     try {
       const newReading = new Reading({
         ...readingData,
-        image_url: new ObjectId() // Placeholder, será atualizado após o upload da imagem
+        image_url: new ObjectId(), // Placeholder, será atualizado após o upload da imagem
       });
       await newReading.save();
     } catch (error) {
-      console.error('Error saving reading:', error);
-      throw new Error('Error saving reading');
+      console.error("Error saving reading:", error);
+      throw new Error("Error saving reading");
     }
   }
-  public async saveImage(imageData: Buffer, measure_uuid: string): Promise<void> {
+  public async saveImage(
+    imageData: Buffer,
+    measure_uuid: string
+  ): Promise<void> {
     try {
       const writeStream = gfs.createWriteStream({
         filename: `${measure_uuid}.png`,
-        content_type: 'image/png',
+        content_type: "image/png",
       });
 
       writeStream.end(imageData);
 
       // Esperar que a escrita esteja completa
       return new Promise((resolve, reject) => {
-        writeStream.on('finish', async () => {
+        writeStream.on("finish", async () => {
           const fileId = writeStream.id;
           // Atualizar o Reading com o ID do arquivo
-          await Reading.updateOne({ measure_uuid }, { image_url: fileId }).then();
+          await Reading.updateOne(
+            { measure_uuid },
+            { image_url: fileId }
+          ).then();
           resolve();
         });
-        writeStream.on('error', reject);
+        writeStream.on("error", reject);
       });
     } catch (error) {
-      console.error('Error saving image:', error);
-      throw new Error('Error saving image');
+      console.error("Error saving image:", error);
+      throw new Error("Error saving image");
     }
   }
 
@@ -92,13 +100,16 @@ export class DatabaseService {
     try {
       return await Reading.findOne({ measure_uuid }).then();
     } catch (error) {
-      console.error('Error fetching reading by UUID:', error);
-      throw new Error('Error fetching reading by UUID');
+      console.error("Error fetching reading by UUID:", error);
+      throw new Error("Error fetching reading by UUID");
     }
   }
 
   // Método para atualizar uma leitura com o valor confirmado
-  public async updateReading(measure_uuid: string, confirmed_value: number): Promise<void> {
+  public async updateReading(
+    measure_uuid: string,
+    confirmed_value: number
+  ): Promise<void> {
     try {
       await Reading.updateOne(
         { measure_uuid },
@@ -110,8 +121,8 @@ export class DatabaseService {
         }
       ).then();
     } catch (error) {
-      console.error('Error updating reading:', error);
-      throw new Error('Error updating reading');
+      console.error("Error updating reading:", error);
+      throw new Error("Error updating reading");
     }
   }
 }

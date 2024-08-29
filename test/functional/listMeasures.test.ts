@@ -68,8 +68,9 @@ describe("GET /customers/:customer_code/list", () => {
     // Mockar o método para retornar uma lista vazia
     mockDbService.getMeasuresByCustomerCode.mockResolvedValue([]);
 
-    const response = await supertest(app)
-      .get(`/customers/${customer_code}/list`);
+    const response = await supertest(app).get(
+      `/customers/${customer_code}/list`,
+    );
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -82,10 +83,13 @@ describe("GET /customers/:customer_code/list", () => {
     const customer_code = "123";
 
     // Mockar o método para lançar um erro
-    mockDbService.getMeasuresByCustomerCode.mockRejectedValue(new Error("Database error"));
+    mockDbService.getMeasuresByCustomerCode.mockRejectedValue(
+      new Error("Database error"),
+    );
 
-    const response = await supertest(app)
-      .get(`/customers/${customer_code}/list`);
+    const response = await supertest(app).get(
+      `/customers/${customer_code}/list`,
+    );
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: "Internal Server Error" });

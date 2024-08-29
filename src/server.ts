@@ -5,7 +5,7 @@ import { UploadImageController } from "./controllers/uploadImage";
 import { ListMeasuresController } from "./controllers/listMeasures";
 import { ConfirmMeasureController } from "./controllers/confirmMeasure";
 import { Application } from "express";
-import * as database from '@src/database';
+import * as database from "@src/database";
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -37,7 +37,7 @@ export class SetupServer extends Server {
     ]);
   }
 
-  private async setupDatabase():Promise <void> {
+  private async setupDatabase(): Promise<void> {
     await database.connect();
   }
   public async close(): Promise<void> {

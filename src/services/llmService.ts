@@ -1,7 +1,7 @@
 // llmService.ts
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-require('dotenv').config();
+require("dotenv").config();
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
@@ -11,14 +11,16 @@ export class LLMService {
 
   constructor() {
     if (!API_KEY) {
-      throw new Error('API_KEY is not defined in the environment variables.');
+      throw new Error("API_KEY is not defined in the environment variables.");
     }
     this.fileManager = new GoogleAIFileManager(API_KEY);
     this.genAI = new GoogleGenerativeAI(API_KEY);
   }
 
   // Method to upload image and get content from it
-  public async extractValueFromImage(imageData: Buffer): Promise<{ value: number }> {
+  public async extractValueFromImage(
+    imageData: Buffer
+  ): Promise<{ value: number }> {
     try {
       // Upload the file
       const uploadResponse = await this.fileManager.uploadFile("image.jpg", {
@@ -35,8 +37,8 @@ export class LLMService {
         {
           fileData: {
             mimeType: uploadResponse.file.mimeType,
-            fileUri: uploadResponse.file.uri
-          }
+            fileUri: uploadResponse.file.uri,
+          },
         },
         { text: "Return only the numeric measure value on the bill" },
       ]);
