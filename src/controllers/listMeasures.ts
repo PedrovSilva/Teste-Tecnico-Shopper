@@ -1,6 +1,6 @@
 import { Controller, Get } from "@overnightjs/core";
 import { Request, Response } from "express";
-import { DatabaseService } from "./databaseService"; // Serviço para interagir com o banco de dados
+import { DatabaseService } from "@src/services/databaseService"; // Serviço para interagir com o banco de dados
 
 @Controller("customers")
 export class ListMeasuresController {

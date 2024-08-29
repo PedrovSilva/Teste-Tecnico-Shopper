@@ -1,6 +1,6 @@
 import { Controller, Patch } from "@overnightjs/core";
 import { Request, Response } from "express";
-import { DatabaseService } from "./databaseService"; // Suponha que você tenha um serviço de banco de dados
+import { DatabaseService } from "@src/services/databaseService"; // Suponha que você tenha um serviço de banco de dados
 
 @Controller("confirm")
 export class ConfirmMeasureController {

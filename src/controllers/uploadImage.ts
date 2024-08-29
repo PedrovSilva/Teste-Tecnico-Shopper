@@ -1,7 +1,7 @@
 import { Controller, Post } from "@overnightjs/core";
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { DatabaseService } from "./databaseService"; // Serviço de banco de dados
+import { DatabaseService } from "@src/services/databaseService"; // Serviço de banco de dados
 import { LLMService } from "@src/services/llmService"; // Serviço para interagir com a API LLM
 import { format } from "date-fns"; // Para formatação de datas
 
@@ -62,32 +62,53 @@ export class UploadImageController {
       }
 
       // Integrar com a API LLM para extrair o valor da imagem
-      const { value } = await this.llmService.extractValueFromImage(imageData);
+      let value: number | null = null;
+      try {
+        const result = await this.llmService.extractValueFromImage(imageData);
+        value = result.value;
+      } catch (error) {
+        res.status(500).json({
+          error_code: "LLM_SERVICE_ERROR",
+          error_description: "Erro ao processar a imagem com a API LLM",
+        });
+        return;
+      }
 
       // Gerar um UUID e construir a URL temporária
       const measure_uuid = uuidv4();
       const image_url = `https://example.com/images/${measure_uuid}.png`; // Ajuste conforme necessário
 
       // Salvar no banco de dados
-      await this.dbService.saveReading({
-        measure_uuid,
-        customer_code,
-        measure_datetime,
-        measure_type,
-        value,
-        image_url,
-        confirmed: false, // Inicialmente não confirmado
-      });
+      try {
+        await this.dbService.saveReading({
+          measure_uuid,
+          customer_code,
+          measure_datetime,
+          measure_type,
+          value,
+          image_url,
+          confirmed: false, // Inicialmente não confirmado
+        });
 
-      // Responder com sucesso
-      res.status(200).json({
-        image_url,
-        measure_value: value,
-        measure_uuid,
-      });
+        // Responder com sucesso
+        res.status(200).json({
+          image_url,
+          measure_value: value,
+          measure_uuid,
+        });
+      } catch (error) {
+        console.error("Error saving reading:", error);
+        res.status(500).json({
+          error_code: "DATABASE_ERROR",
+          error_description: "Erro ao salvar a leitura no banco de dados",
+        });
+      }
     } catch (error) {
       console.error("Error processing upload request:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({
+        error_code: "INTERNAL_SERVER_ERROR",
+        error_description: "Erro interno no servidor",
+      });
     }
   }
 }

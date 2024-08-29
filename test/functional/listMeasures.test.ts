@@ -1,10 +1,12 @@
 import supertest from "supertest";
 import { app } from "@test/jest-setup";
-import { DatabaseService } from "../path/to/databaseService"; // Importar o serviço de banco de dados
+import { DatabaseService } from "@src/services/databaseService";
 
-jest.mock("../path/to/databaseService"); // Mockar o serviço de banco de dados
+// Mockar a classe DatabaseService
+jest.mock("@src/services/databaseService");
 
-const mockDbService = DatabaseService as jest.Mocked<typeof DatabaseService>;
+// Criar uma instância mockada da DatabaseService
+const mockDbService = jest.mocked(DatabaseService.prototype);
 
 describe("GET /customers/:customer_code/list", () => {
   beforeEach(() => {
@@ -31,9 +33,8 @@ describe("GET /customers/:customer_code/list", () => {
       },
     ];
 
-    mockDbService.prototype.getMeasuresByCustomerCode.mockResolvedValue(
-      measures,
-    );
+    // Mockar o método de instância getMeasuresByCustomerCode
+    mockDbService.getMeasuresByCustomerCode.mockResolvedValue(measures);
 
     const response = await supertest(app)
       .get(`/customers/${customer_code}/list`)
@@ -64,11 +65,11 @@ describe("GET /customers/:customer_code/list", () => {
   it("should return 404 if no measures are found", async () => {
     const customer_code = "123";
 
-    mockDbService.prototype.getMeasuresByCustomerCode.mockResolvedValue([]);
+    // Mockar o método para retornar uma lista vazia
+    mockDbService.getMeasuresByCustomerCode.mockResolvedValue([]);
 
-    const response = await supertest(app).get(
-      `/customers/${customer_code}/list`,
-    );
+    const response = await supertest(app)
+      .get(`/customers/${customer_code}/list`);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
@@ -80,13 +81,11 @@ describe("GET /customers/:customer_code/list", () => {
   it("should return 500 on server error", async () => {
     const customer_code = "123";
 
-    mockDbService.prototype.getMeasuresByCustomerCode.mockRejectedValue(
-      new Error("Database error"),
-    );
+    // Mockar o método para lançar um erro
+    mockDbService.getMeasuresByCustomerCode.mockRejectedValue(new Error("Database error"));
 
-    const response = await supertest(app).get(
-      `/customers/${customer_code}/list`,
-    );
+    const response = await supertest(app)
+      .get(`/customers/${customer_code}/list`);
 
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: "Internal Server Error" });
