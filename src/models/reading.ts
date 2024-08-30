@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Grid from "gridfs-stream";
+import Grid  from "gridfs-stream";
 
 // Configura o GridFS
 let gfs: any;

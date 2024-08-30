@@ -1,7 +1,8 @@
 // llmService.ts
 import { GoogleAIFileManager } from "@google/generative-ai/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-require("dotenv").config();
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const API_KEY = process.env.GEMINI_API_KEY;
 
