@@ -6,6 +6,7 @@ import { ListMeasuresController } from "./controllers/listMeasures";
 import { ConfirmMeasureController } from "./controllers/confirmMeasure";
 import { Application } from "express";
 import * as database from "@src/database";
+import swaggerConfig from "./util/swagger";
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -24,6 +25,12 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(bodyParser.json());
+
+    this.app.use(
+      "/api-docs",
+      swaggerConfig.swaggerUi.serve,
+      swaggerConfig.swaggerUi.setup(swaggerConfig.specs)
+    );
   }
   private setupController(): void {
     const uploadImageController = new UploadImageController();

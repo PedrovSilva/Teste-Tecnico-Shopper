@@ -5,6 +5,58 @@ import { DatabaseService } from "@src/services/databaseService"; // Serviço de 
 import { LLMService } from "@src/services/llmService"; // Serviço para interagir com a API LLM
 import { format } from "date-fns"; // Para formatação de datas
 
+
+/**
+ * @swagger
+ * /upload:
+ *   post:
+ *     summary: Upload an image
+ *     description: Uploads an image and extracts the measure value from it.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 example: 'base64-encoded-image'
+ *               customer_code:
+ *                 type: string
+ *                 example: 'customer123'
+ *               measure_datetime:
+ *                 type: string
+ *                 format: date-time
+ *                 example: '2024-08-30T12:00:00Z'
+ *               measure_type:
+ *                 type: string
+ *                 enum: [WATER, GAS]
+ *                 example: 'WATER'
+ *     responses:
+ *       200:
+ *         description: Successfully uploaded and processed image
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 image_url:
+ *                   type: string
+ *                   example: 'https://example.com/images/uuid.png'
+ *                 measure_value:
+ *                   type: number
+ *                   example: 123.45
+ *                 measure_uuid:
+ *                   type: string
+ *                   example: 'uuid-1234'
+ *       400:
+ *         description: Invalid request data
+ *       409:
+ *         description: Duplicate measure for the current month
+ *       500:
+ *         description: Internal server error
+ */
 @Controller("upload")
 export class UploadImageController {
   private dbService: DatabaseService;
