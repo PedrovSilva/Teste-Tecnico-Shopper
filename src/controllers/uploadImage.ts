@@ -5,7 +5,6 @@ import { DatabaseService } from "@src/services/databaseService"; // Serviço de 
 import { LLMService } from "@src/services/llmService"; // Serviço para interagir com a API LLM
 import { format } from "date-fns"; // Para formatação de datas
 
-
 /**
  * @swagger
  * /upload:

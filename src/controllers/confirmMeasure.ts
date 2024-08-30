@@ -2,6 +2,69 @@ import { Controller, Patch } from "@overnightjs/core";
 import { Request, Response } from "express";
 import { DatabaseService } from "@src/services/databaseService"; // Suponha que você tenha um serviço de banco de dados
 
+/**
+ * @swagger
+ * /confirm:
+ *   patch:
+ *     summary: Confirm a measure
+ *     description: Updates the confirmation status of a specific measure with a confirmed value.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               measure_uuid:
+ *                 type: string
+ *                 description: The UUID of the measure to confirm.
+ *                 example: 'b3e4d4b8-14f8-4c09-96a3-2b93087cfb9c'
+ *               confirmed_value:
+ *                 type: number
+ *                 description: The confirmed value to set for the measure.
+ *                 example: 123.45
+ *     responses:
+ *       200:
+ *         description: Confirmation successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid data types or already confirmed reading
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid data types"
+ *       404:
+ *         description: Reading not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Reading not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ */
 @Controller("confirm")
 export class ConfirmMeasureController {
   private dbService: DatabaseService;

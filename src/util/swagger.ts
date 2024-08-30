@@ -1,5 +1,6 @@
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import "./module-alias";
 
 const options = {
   definition: {
@@ -15,7 +16,7 @@ const options = {
       },
     ],
   },
-  apis: ["./src/controllers/*.ts"], // Altere o caminho conforme necessário
+  apis: ["@src/controllers/*.ts"], // Altere o caminho conforme necessário
 };
 
 const specs = swaggerJsdoc(options);
